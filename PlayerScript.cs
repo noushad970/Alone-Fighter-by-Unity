@@ -6,7 +6,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
-public class PlayerController : MonoBehaviour
+public class PlayerScript : MonoBehaviour
 {
     [Header("PlayerMovement")]
     public float playerSpeed = 1.1f;
@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public CharacterController cC;
     public float gravity = -9.81f;
     public Animator animator;
+    float animationMoveSpeed;
 
     [Header("Player Jumping and velocity")]
     public float turnCalmTime = 0.1f;
@@ -59,6 +60,8 @@ public class PlayerController : MonoBehaviour
         playerMove();
         Jump();
         sprint();
+        animator.SetFloat("MovementValue", animationMoveSpeed,0.1f,Time.deltaTime);
+
         if (moving == true)
         {
 
@@ -88,7 +91,6 @@ public class PlayerController : MonoBehaviour
     }
     void playerMove()
     {
-       // float moveAmmount = Mathf.Abs(horizontal_move) + Mathf.Abs(Vertical_move);
 
         if (Input.GetKey(KeyCode.DownArrow) && OnSurface)
         {
@@ -98,8 +100,8 @@ public class PlayerController : MonoBehaviour
             playerSpeed = 1.1f;
         float horizontal_move = Input.GetAxisRaw("Horizontal");
         float Vertical_move = Input.GetAxisRaw("Vertical");
-        float moveSpeed = (Mathf.Abs(horizontal_move) + Mathf.Abs(Vertical_move));
-
+        float moveSpeed = Mathf.Clamp01(Mathf.Abs(horizontal_move) + Mathf.Abs(Vertical_move));
+        
         Vector3 direction = new Vector3(horizontal_move, 0f, Vertical_move).normalized;
         
         if (direction.magnitude >= 0.1f)
@@ -107,10 +109,7 @@ public class PlayerController : MonoBehaviour
 
             ismoving = true;
             moving = true;
-            //animator.SetBool("Walk", true);
-            //animator.SetBool("Run", false);
-            animator.SetFloat("MoveSpeed", moveSpeed,0.2f,Time.deltaTime);
-
+            animationMoveSpeed = moveSpeed / 2;
             // handgun2.ismoving = true;
 
             float targetAngle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg + playerCamera.eulerAngles.y;
@@ -123,12 +122,10 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            animator.SetFloat("MoveSpeed", 0, 0.2f, Time.deltaTime);
-            //animator.SetBool("Walk", false);
-            //animator.SetBool("Run1", false);
+            
             ismoving = false;
-            // handgun2.ismoving = false;
             moving = false;
+            animationMoveSpeed = 0f;
         }
 
     }
@@ -137,14 +134,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && OnSurface)
         {
             velocity.y = Mathf.Sqrt(jumrange * -2 * gravity);
-            //animator.SetBool("IdleAim", false);
             animator.SetTrigger("Jump");
 
 
         }
         else
         {
-            // animator.SetBool("IdleAim", true);
             animator.ResetTrigger("Jump");
 
 
@@ -158,8 +153,8 @@ public class PlayerController : MonoBehaviour
             float horizontal_move = Input.GetAxisRaw("Horizontal");
             float Vertical_move = Input.GetAxisRaw("Vertical");
             float moveSpeed = Mathf.Clamp01(Mathf.Abs(horizontal_move) + Mathf.Abs(Vertical_move));
+           
             Vector3 direction = new Vector3(horizontal_move, 0f, Vertical_move).normalized;
-
             if (direction.magnitude >= 0.1f)
             {
                 float targetAngle = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg + playerCamera.eulerAngles.y;
@@ -169,22 +164,16 @@ public class PlayerController : MonoBehaviour
                 Vector3 movedirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
 
                 cC.Move(movedirection.normalized * playerSprint * Time.deltaTime);
-                animator.SetFloat("MoveSpeed", 1f+moveSpeed, 0.2f, Time.deltaTime);
+                animationMoveSpeed = moveSpeed;  
 
                 ismoving = true;
-                //handgun2.ismoving = true;
                 running = true;
-                //animator.SetBool("Walk1", false);
-                //animator.SetBool("Run1", true);
             }
             else
             {
-                animator.SetFloat("MoveSpeed", 1f + moveSpeed, 0.2f, Time.deltaTime);
-                //animator.SetBool("Walk", false);
-                //animator.SetBool("Run", false);
+                animationMoveSpeed = 0;
                 running = false;
                 ismoving = false;
-                //handgun2.ismoving = false;
             }
         }
     }
@@ -210,5 +199,41 @@ public class PlayerController : MonoBehaviour
         Object.Destroy(gameObject, 1.0f);
     }
 
-
 }
+
+//player movement extra
+/*
+ [Header("Player Movement")]
+    public float movementSpeed = 3f;
+    public float rotSpeed = 450f;
+    Quaternion requiredRotation;
+    public MainCameraController MCC;
+
+    [Header("Player Animator")]
+    public Animator animator;
+    private void Update()
+    {
+        PlayerMovement();
+    }
+    void PlayerMovement()
+    {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+
+        float movementAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
+        var movementInput = (new Vector3(horizontal, 0, vertical)).normalized;
+        var movementDirection = MCC.flatRotation * movementInput;
+    
+        if(movementAmount>0)
+        {
+            transform.position += movementDirection * movementSpeed * Time.deltaTime;
+            transform.rotation=Quaternion.LookRotation(movementDirection);
+        }
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, requiredRotation, rotSpeed * Time.deltaTime);
+
+        animator.SetFloat("MovementValue", movementAmount,0.1f,Time.deltaTime);
+    }
+ */
+/*
+  
+ */
