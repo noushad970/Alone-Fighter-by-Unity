@@ -14,9 +14,10 @@ public class ParkourControllerScripts : MonoBehaviour
     [SerializeField] NewParkourAction jumpDownParkourAction;
     private void Update()
     {
-       if(Input.GetButton("Jump") && !PlayerInAction)
+        var hitData = environmentChecker.CheckObstacle();
+        if (Input.GetButton("Jump") && !PlayerInAction)
         {
-            var hitData = environmentChecker.CheckObstacle();
+            
             if (hitData.hitFound)
             {
               //  playerScript.RotateTowardsTarget();
@@ -30,18 +31,19 @@ public class ParkourControllerScripts : MonoBehaviour
                 }
                 }
         }
-       if(playerScript.playerOnledge && !PlayerInAction)
+       if(playerScript.playerOnledge && !PlayerInAction && !hitData.hitFound && Input.GetButton("Jump"))
         {
             if(playerScript.LedgeInfo.angle<=50)
             {
-                //slide changes made here: if player is on the ledge than it
-                playerScript.movementSpeed = 0f;
-                animator.SetFloat("MovementValue", 0f,0.2f,Time.deltaTime);
+                //slide changes made here: if player is on the ledge than player will stop.only jump down if i press jump key
+                // playerScript.movementSpeed = 0f;
+                // animator.SetFloat("MovementValue", 0f,0.1f,Time.deltaTime);
+                // playerScript.movementSpeed = 3f;
 
-                if (Input.GetButton("Jump")) {
-                    animator.CrossFade("JumpingDown", .1f);
-                    playerScript.movementSpeed = 3f;
-                }
+                // if (Input.GetButton("Jump")) {
+                //    animator.CrossFade("JumpingDown", .1f);
+                //   }
+                animator.CrossFade("JumpingDown", .1f);
                 playerScript.playerOnledge = false;
                 //StartCoroutine(PerformParkourAction(jumpDownParkourAction));
             }
