@@ -11,6 +11,7 @@ public class ParkourControllerScripts : MonoBehaviour
 
     [Header("Parkour Action Area")]
     public List<NewParkourAction> newParkourAction;
+    [SerializeField] NewParkourAction jumpDownParkourAction;
     private void Update()
     {
        if(Input.GetButton("Jump") && !PlayerInAction)
@@ -29,6 +30,22 @@ public class ParkourControllerScripts : MonoBehaviour
                 }
                 }
         }
+       if(playerScript.playerOnledge && !PlayerInAction)
+        {
+            if(playerScript.LedgeInfo.angle<=50)
+            {
+                //slide changes made here: if player is on the ledge than it
+                playerScript.movementSpeed = 0f;
+                animator.SetFloat("MovementValue", 0f,0.2f,Time.deltaTime);
+
+                if (Input.GetButton("Jump")) {
+                    animator.CrossFade("JumpingDown", .1f);
+                    playerScript.movementSpeed = 3f;
+                }
+                playerScript.playerOnledge = false;
+                //StartCoroutine(PerformParkourAction(jumpDownParkourAction));
+            }
+        }
     }
     IEnumerator PerformParkourAction(NewParkourAction action)
     {
@@ -40,7 +57,7 @@ public class ParkourControllerScripts : MonoBehaviour
         var animationState = animator.GetNextAnimatorStateInfo(0);
         if(!animationState.IsName(action.AnimationName))
         {
-            Debug.Log("Animation Name is Incorrect");
+            Debug.Log("Animation Name is Incorrect.the name is: "+action.AnimationName+" Other name: " +animator.name);
         }
         //yield return new WaitForSeconds(animationState.length);
 
@@ -49,19 +66,20 @@ public class ParkourControllerScripts : MonoBehaviour
         {
             timercounter += Time.deltaTime;
             //make player to look toward to the obstacle
-            /*if(action.LookAtObstacle)
+            if(action.LookAtObstacle)
             {
                 transform.rotation= Quaternion.RotateTowards(transform.rotation, action.RequiredRotation, playerScript.rotSpeed*Time.deltaTime);
-            }*/
+            }
             if(action.AllowTargetMatching)
             {
                 compareTarget(action);
             }
 
-
+            if (animator.IsInTransition(0) && timercounter > 0.4f) break;
            yield return null;
         }
-            playerScript.setControl(true);
+        yield return new WaitForSeconds(action.ParkourActionDelay);
+        playerScript.setControl(true);
         PlayerInAction =false;
         
     }

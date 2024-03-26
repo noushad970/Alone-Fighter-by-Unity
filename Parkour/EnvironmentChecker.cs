@@ -9,7 +9,10 @@ public class EnvironmentChecker : MonoBehaviour
     public float raylength = 0.9f; //minimum distance between player and the object when raycast will work
     public LayerMask obstacleLayer;
     public float heightRayLength = 5f;
-    
+    [Header("Check Ledges")]
+    [SerializeField] float ledgeRayLength = 11f;
+    [SerializeField] float ledgeRayHeightThreshold = 0.76f;
+
     public ObstacleInfo CheckObstacle()
     {
         var hitdata= new ObstacleInfo();
@@ -27,7 +30,32 @@ public class EnvironmentChecker : MonoBehaviour
         }
         return hitdata;
     }
-
+    public bool CheckLedge(Vector3 moveDirection,out LedgeInfo ledgeInfo)
+    {
+        ledgeInfo= new LedgeInfo();
+        if(moveDirection== Vector3.zero) return false;
+        float ledgeOriginOffset = 0.5f;
+        var ledgeOrigin= transform.position+moveDirection*ledgeOriginOffset+Vector3.up;
+        if(Physics.Raycast(ledgeOrigin,Vector3.down,out RaycastHit hit,ledgeRayLength,obstacleLayer))
+        {
+            Debug.DrawRay(ledgeOrigin, Vector3.down * ledgeRayLength, Color.blue);
+            var surfaceRayCastOrigin = transform.position + moveDirection - new Vector3(0, 0.1f, 0);
+            if(Physics.Raycast(surfaceRayCastOrigin, -moveDirection, out RaycastHit SurfaceHit, 2, obstacleLayer))
+            { 
+                float ledgeHeigth = transform.position.y - hit.point.y;
+                
+                if (ledgeHeigth > ledgeRayHeightThreshold)
+                {
+                    ledgeInfo.angle=Vector3.Angle(transform.forward, SurfaceHit.normal);
+                    ledgeInfo.surfaceHit=SurfaceHit;
+                    ledgeInfo.height=ledgeHeigth;
+                    
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }
 public struct ObstacleInfo
@@ -38,5 +66,11 @@ public struct ObstacleInfo
     public RaycastHit HeightInfo;
 
 
+}
+public struct LedgeInfo
+{
+    public float angle;
+    public float height;
+    public RaycastHit surfaceHit;
 }
 

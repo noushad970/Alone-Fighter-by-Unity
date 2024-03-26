@@ -7,11 +7,13 @@ public class NewParkourAction : ScriptableObject
 {
     [Header("Checking Obstacle Height")]
     [SerializeField] string animationName;
+    [SerializeField] string barrierTag;
     [SerializeField] float minimumHeight;
     [SerializeField] float maximumHeight;
 
     [Header("Rotating to Obstacles")]
     [SerializeField] bool lookAtObstacle;
+    [SerializeField] float parkourActionDelay;
     public Quaternion RequiredRotation { get; set; }
 
 
@@ -25,7 +27,13 @@ public class NewParkourAction : ScriptableObject
 
 
     public bool CheckIfAvailable(ObstacleInfo hitData,Transform player)
-    {
+    {   //check barrier 
+        if(hitData.hitInfo.transform.tag== barrierTag) 
+        {
+            return true;
+        }
+        //checkHeight
+        
         float checkHeight = hitData.HeightInfo.point.y - player.position.y;
         if(checkHeight < minimumHeight || checkHeight>maximumHeight) { return false; }
         if(lookAtObstacle)
@@ -43,6 +51,7 @@ public class NewParkourAction : ScriptableObject
     public float CompareStartTime => compareStartTime;
     public float CompareEndTime => compareEndTime;
     public bool AllowTargetMatching=>allowTargetMatching;
+    public float ParkourActionDelay => parkourActionDelay;
     public AvatarTarget CompareBodyPart => compareBodyPart;
     public Vector3 ComparePositionWeight => comparePositionWeight;
 }

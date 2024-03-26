@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -14,6 +15,8 @@ public class PlayerScript : MonoBehaviour
     public MainCameraController MCC;
     public float rotSpeed = 600f;
     Quaternion requiredRotation;
+    public EnvironmentChecker environmentChecker;
+
 
     [Header("Player Animator")]
     public Animator animator;
@@ -27,6 +30,8 @@ public class PlayerScript : MonoBehaviour
     bool OnSurface;
     [SerializeField] float fallingSpeed;
     [SerializeField] Vector3 moveDir;
+    public bool playerOnledge { get; set; }
+    public LedgeInfo LedgeInfo { get; set; }
     //second
     public float gravity = -9.81f;
     float animationMoveSpeed;
@@ -38,17 +43,26 @@ public class PlayerScript : MonoBehaviour
     private void Update()
     {
         Surface();
-        /*if (OnSurface)
+        if (OnSurface)
         {
-            fallingSpeed = -0.5f;
+            // fallingSpeed = -0.5f;
+           playerOnledge= environmentChecker.CheckLedge(moveDir,out LedgeInfo ledgeInfo);
+            if(playerOnledge )
+            {
+                LedgeInfo = ledgeInfo;
+                Debug.Log("Player On ledge");
+            }
         }
-        else
-        {
-            fallingSpeed += Physics.gravity.y * Time.deltaTime;
-        }
+        
+        
+        /*        else
+                {
+                    fallingSpeed += Physics.gravity.y * Time.deltaTime;
+                }
 
-        var velocity = moveDir * movementSpeed;
-        velocity.y = fallingSpeed;*/
+                var velocity = moveDir * movementSpeed;
+                velocity.y = fallingSpeed;*/
+        animator.SetBool("OnSurface", OnSurface);
         playerMovement();
        // SurfaceCheck();
 
@@ -63,12 +77,21 @@ public class PlayerScript : MonoBehaviour
         var movementInput = (new Vector3(horizontal, 0, vertical)).normalized;
         var movementDirection = MCC.flatRotation * movementInput;
         cC.Move(movementDirection * movementSpeed * Time.deltaTime);
+        if (Input.GetKey(KeyCode.RightShift))
+        {
+            movementSpeed = 5f;
+            movementAmount = 1.5f;
+        }
+        else
+            movementSpeed = 3f;
+       
+       // Debug.Log("MoveDirection: " + movementDirection + " MoveSpeed: " + movementSpeed + " ::" + "Velocity: "+velocity);
         cC.Move(velocity * Time.deltaTime);
         if (movementAmount > 0)
         {
             requiredRotation = Quaternion.LookRotation(movementDirection);
         }
-        movementDirection = moveDir;
+         moveDir= movementDirection;
          transform.rotation=Quaternion.RotateTowards(transform.rotation, requiredRotation, rotSpeed*Time.deltaTime);
         animator.SetFloat("MovementValue", movementAmount,0.2f,Time.deltaTime);
     }
@@ -79,6 +102,7 @@ public class PlayerScript : MonoBehaviour
         if (!hasControl)
         {
             animator.SetFloat("MovementValue", 0f);
+
 
         }
 
