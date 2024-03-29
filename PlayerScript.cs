@@ -31,6 +31,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float fallingSpeed;
     [SerializeField] Vector3 moveDir;
     [SerializeField] Vector3 RequiredMoveDir;
+    //public FistFight fistFight;
     public bool playerOnledge { get; set; }
     public LedgeInfo LedgeInfo { get; set; }
     //second
@@ -41,6 +42,7 @@ public class PlayerScript : MonoBehaviour
     public float surfaceDistance = 0.4f;
     public LayerMask surfaceMask;
     Vector3 velocity;
+   
     private void Update()
     {
         
@@ -64,7 +66,7 @@ public class PlayerScript : MonoBehaviour
             velocity = transform.forward * movementSpeed / 2;
         }
         velocity.y = fallingSpeed;
-        
+
         
         /*        else
                 {
@@ -83,25 +85,29 @@ public class PlayerScript : MonoBehaviour
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-
+        
         float movementAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
         var movementInput = (new Vector3(horizontal, 0, vertical)).normalized;
         RequiredMoveDir = MCC.flatRotation * movementInput;
-        //if(OnSurface)
-        //{
+       
             cC.Move(velocity * Time.deltaTime);
 
-       // }
         if (Input.GetKey(KeyCode.RightShift))
         {
             movementSpeed = 5f;
-            movementAmount = 1.5f;
+            animator.SetFloat("MovementValue", 1.5f, 0.2f, Time.deltaTime);
         }
         else
             movementSpeed = 3f;
+        //fistfight speed
+        /*if (fistFight.isFistAnimated == true)
+        {
+            movementSpeed = 0f;
+        }
+        else
+            movementSpeed = 3f;
+        */
        
-       // Debug.Log("MoveDirection: " + movementDirection + " MoveSpeed: " + movementSpeed + " ::" + "Velocity: "+velocity);
-      //  cC.Move(velocity * Time.deltaTime);
         if (movementAmount > 0 && moveDir.magnitude>0.2f)
         {
             requiredRotation = Quaternion.LookRotation(moveDir);

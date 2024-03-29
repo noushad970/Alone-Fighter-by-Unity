@@ -8,12 +8,14 @@ public class GranadeThrowing : MonoBehaviour
     public Transform granadeArea;
     public GameObject granadePrefab;
     public Animator anim;
+    float timer = 3f;
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1) && timer == 3f)
         {
             StartCoroutine(GranadeAnim());
+            StartCoroutine(timers());
         }
     }
     void throwGranade()
@@ -24,12 +26,19 @@ public class GranadeThrowing : MonoBehaviour
     }
     IEnumerator GranadeAnim()
     {
+       
         anim.SetBool("GranadeInAir", true);
         yield return new WaitForSeconds(0.5f);
         throwGranade();
         yield return new WaitForSeconds(1f); 
         anim.SetBool("GranadeInAir", false);
-    //    Destroy(granadePrefab);
+   
+    }
+    IEnumerator timers()
+    {
+        timer = 0f;
+        yield return new WaitForSeconds(3f);
+        timer = 3f;
     }
 
 }
