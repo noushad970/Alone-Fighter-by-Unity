@@ -19,8 +19,9 @@ public class FistFight : MonoBehaviour
     [SerializeField] Transform LeftLegKick;
     [SerializeField] Transform RightLegKick;
     public PlayerScript player;
-    
-   
+    [SerializeField] float timerCoolDown = 1f;
+
+
 
     // Update is called once per frame
     void Update()
@@ -43,7 +44,7 @@ public class FistFight : MonoBehaviour
                 anim.SetBool("FistFightActive", false);
             }
 
-            
+            timerCoolDown-=Time.deltaTime;
         
         
 
@@ -62,15 +63,17 @@ public class FistFight : MonoBehaviour
             }
 
         }
+       
     }
     private void OnDrawGizmosSelected()
     {
         if(attackArea == null) { return; }
         Gizmos.DrawWireSphere(attackArea.position, attackRadius);
     }
+    
     void FistFightMode()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && timerCoolDown<=0)
         {
             fistfightVal = Random.Range(1, 5);
         }
@@ -110,6 +113,7 @@ public class FistFight : MonoBehaviour
             Attack();
             StartCoroutine(punch2());
         }
+        
     }
     IEnumerator singleFist()
     {
@@ -118,6 +122,7 @@ public class FistFight : MonoBehaviour
        // isFistAnimated = true;
         anim.SetBool("SingleFist", true);
         yield return new WaitForSeconds(1.05f);
+        timerCoolDown = 1f;
         anim.SetBool("SingleFist", false);
         player.movementSpeed = 3f;
         anim.SetFloat("MovementValue", 0f);
@@ -130,6 +135,7 @@ public class FistFight : MonoBehaviour
         anim.SetFloat("MovementValue", 0f);
         anim.SetBool("DoubleFist", true);
         yield return new WaitForSeconds(1.12f);
+        timerCoolDown = 1f;
         anim.SetBool("DoubleFist", false);
         player.movementSpeed = 3f;
         anim.SetFloat("MovementValue", 0f);
@@ -142,6 +148,7 @@ public class FistFight : MonoBehaviour
         anim.SetFloat("MovementValue", 0f);
         anim.SetBool("SingleKick", true);
         yield return new WaitForSeconds(1f);
+        timerCoolDown = 1f;
         anim.SetBool("SingleKick", false);
         player.movementSpeed = 3f;
         anim.SetFloat("MovementValue", 0f);
@@ -154,6 +161,7 @@ public class FistFight : MonoBehaviour
         anim.SetFloat("MovementValue", 0f);
         anim.SetBool("Punch2", true);
         yield return new WaitForSeconds(2f);
+        timerCoolDown = 1f;
         anim.SetBool("Punch2", false);
         player.movementSpeed = 3f;
         anim.SetFloat("MovementValue", 0f);
@@ -166,6 +174,7 @@ public class FistFight : MonoBehaviour
         anim.SetFloat("MovementValue", 0f);
         anim.SetBool("SwingKick", true);
         yield return new WaitForSeconds(1.1f);
+        timerCoolDown = 1f;
         anim.SetBool("SwingKick", false);
         player.movementSpeed = 3f;
         anim.SetFloat("MovementValue", 0f);
