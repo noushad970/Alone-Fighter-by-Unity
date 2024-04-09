@@ -10,11 +10,12 @@ public class RifleControl : MonoBehaviour
     public float shootingRange = 100f;
     public Animator animator;
     [Header("Rifle Ammo & Reload")]
-    private int maximumAmmunition = 1;
+    private int maximumAmmunition = 2;
     public int presentAmmo;
     public int mag;
     public float reloadingTime;
     public bool setReloading;
+    bool waitOneSec=false;
 
     private void Start()
     {
@@ -31,7 +32,7 @@ public class RifleControl : MonoBehaviour
         {
             StartCoroutine(Reload());
         }
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && mag>0 && !waitOneSec)
         {
             animator.SetBool("RifleActive", true);
             animator.SetBool("RifleShoot", true);
@@ -45,6 +46,7 @@ public class RifleControl : MonoBehaviour
     }
     void shoot()
     {
+        StartCoroutine(waitSec());
         if (mag <= 0)
         {
             return;
@@ -63,6 +65,12 @@ public class RifleControl : MonoBehaviour
                 knightAI.takeDamage(giveDamage);
             }
         }
+    }
+    IEnumerator waitSec()
+    {
+        waitOneSec=true;
+        yield return new WaitForSeconds(1f);
+        waitOneSec = false;
     }
     IEnumerator Reload()
     {
