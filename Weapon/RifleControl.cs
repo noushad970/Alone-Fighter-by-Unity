@@ -10,12 +10,15 @@ public class RifleControl : MonoBehaviour
     public float shootingRange = 100f;
     public Animator animator;
     [Header("Rifle Ammo & Reload")]
-    private int maximumAmmunition = 2;
+    private int maximumAmmunition = 5;
     public int presentAmmo;
     public int mag;
     public float reloadingTime;
     public bool setReloading;
     bool waitOneSec=false;
+    bool isMoving=false;
+    public PlayerScript playerScript;
+    public GameObject crossHair;
 
     private void Start()
     {
@@ -24,6 +27,10 @@ public class RifleControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(animator.GetFloat("MovementValue")>0.0001f)
+            isMoving = true;
+        else if(animator.GetFloat("MovementValue")<0.0999999f)
+            isMoving = false;
         if(setReloading)
         {
             return;
@@ -32,7 +39,7 @@ public class RifleControl : MonoBehaviour
         {
             StartCoroutine(Reload());
         }
-        if(Input.GetMouseButtonDown(0) && mag>0 && !waitOneSec)
+        if(Input.GetMouseButtonDown(0) && mag>0 && !isMoving)
         {
             animator.SetBool("RifleActive", true);
             animator.SetBool("RifleShoot", true);
@@ -43,10 +50,20 @@ public class RifleControl : MonoBehaviour
             animator.SetBool("RifleShoot", false);
            
         }
+        if (Input.GetMouseButton(1))
+        {
+            crossHair.SetActive(true);
+            animator.SetBool("RifleAim", true);
+        }
+        if (!Input.GetMouseButton(1))
+        {
+            crossHair.SetActive(false);
+            animator.SetBool("RifleAim", false);
+        }
+
     }
     void shoot()
     {
-        StartCoroutine(waitSec());
         if (mag <= 0)
         {
             return;
@@ -75,10 +92,14 @@ public class RifleControl : MonoBehaviour
     IEnumerator Reload()
     {
         setReloading=true;
+        animator.SetFloat("MovementValue", 0f);
+        playerScript.movementSpeed = 0f;
         animator.SetBool("Reloading", true);
         yield return new WaitForSeconds(reloadingTime);
         animator.SetBool("Reloading", false);
         presentAmmo = maximumAmmunition;
         setReloading = false;
+        animator.SetFloat("MovementValue", 0f);
+        playerScript.movementSpeed = 5f;
     }
 }
