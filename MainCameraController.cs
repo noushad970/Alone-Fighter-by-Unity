@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script will attach with main camera
 public class MainCameraController : MonoBehaviour
 {
     [Header("Camera Controller")]

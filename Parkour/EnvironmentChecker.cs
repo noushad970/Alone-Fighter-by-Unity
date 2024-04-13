@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script will attach with player
 public class EnvironmentChecker : MonoBehaviour
 {
     //we must create a layer name obstacleLayer. this layer will be use to detect a player hit or not hit on that obstacle layer.we will add the layer name to the obstacle and layer mask to the player.

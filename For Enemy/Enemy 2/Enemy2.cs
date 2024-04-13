@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//this script will attach with Idle Enemy
 public class Enemy2 : MonoBehaviour
 {
     [Header("Character Info")]

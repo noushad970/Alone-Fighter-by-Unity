@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+// this script will not be attached. its need for creating waypoint
 public class WayPoint : MonoBehaviour
 {
     [Header("Waypoint Status")]

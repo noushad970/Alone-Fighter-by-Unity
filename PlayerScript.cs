@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
+//this script will attach with player
 
 public class PlayerScript : MonoBehaviour
 {

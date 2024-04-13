@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//this script will attach with the walking enemy
 public class KnightAI : MonoBehaviour
 {
     [Header("Character Info")]

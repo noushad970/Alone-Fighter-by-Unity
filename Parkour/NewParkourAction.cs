@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//this need for creating action button
 
 [CreateAssetMenu(menuName = "Parkour Menu/Create new Parkour Action")]
 public class NewParkourAction : ScriptableObject

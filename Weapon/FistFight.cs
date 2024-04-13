@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script will attach with player
 public class FistFight : MonoBehaviour
 {
     [Header("Fist Fight")]

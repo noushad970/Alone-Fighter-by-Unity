@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script will attach with player
 public class ParkourControllerScripts : MonoBehaviour
 {
     public EnvironmentChecker environmentChecker;

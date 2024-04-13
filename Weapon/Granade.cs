@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script will attach with granade
 public class Granade : MonoBehaviour
 {
     public float granadeTimer = 3f;

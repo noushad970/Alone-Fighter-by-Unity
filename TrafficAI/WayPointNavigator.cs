@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script will attach with the AI Characters NPC
 public class WayPointNavigator : MonoBehaviour
 {
     [Header("AI Character")]

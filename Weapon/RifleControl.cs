@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script will attach with the player
 public class RifleControl : MonoBehaviour
 {
     [Header("Rifle Things")]

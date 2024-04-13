@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//this script will attach with walking Enemy who will walk through the way point
 public class KnightWayPointNavigator : MonoBehaviour
 {
     [Header("AI Character")]

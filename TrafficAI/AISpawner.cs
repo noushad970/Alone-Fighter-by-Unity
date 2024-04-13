@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script must need to attach to the waypoints parent object
 public class AISpawner : MonoBehaviour
 {
-    //this script must need to attach to the waypoints parent object
+    
     public GameObject[] AIPrefab;
     public int AItoSpawn;
 

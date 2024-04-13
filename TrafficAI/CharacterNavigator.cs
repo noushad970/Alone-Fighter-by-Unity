@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//this script will attach with AI characters
 public class CharacterNavigator : MonoBehaviour
 {
     [Header("Character Info")]
