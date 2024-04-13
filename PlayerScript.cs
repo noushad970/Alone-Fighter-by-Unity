@@ -11,6 +11,15 @@ using Vector3 = UnityEngine.Vector3;
 
 public class PlayerScript : MonoBehaviour
 {
+    [Header("Player Health & Energy")]
+    public float PlayerHealth=200f;
+    public float presentHealth;
+    private float PlayerEnergy = 100f;
+    public float presentEnergy;
+    public HealthBar healthBar;
+    public EnergyBar energyBar;
+    public GameObject damageIndicator;
+    
     [Header("PlayerMovement")]
     public float movementSpeed = 3f;
     public MainCameraController MCC;
@@ -43,10 +52,40 @@ public class PlayerScript : MonoBehaviour
     public float surfaceDistance = 0.4f;
     public LayerMask surfaceMask;
     Vector3 velocity;
-   
+
+    private void Awake()
+    {
+        presentHealth = PlayerHealth;
+        presentEnergy = PlayerEnergy;
+        healthBar.GiveFullHealth(presentHealth);
+        energyBar.GiveFullEnergy(presentEnergy);
+    }
+
     private void Update()
     {
-        
+        if(animator.GetFloat("MovementValue") >=0.9999)
+        {
+            PlayerEnergyDecrease(0.02f);
+        }
+        if(presentEnergy<=0)
+        {
+            movementSpeed = 1.5f;
+            if(!Input.GetButton("Horizontal") || !Input.GetButton("Vertical"))
+            {
+                animator.SetFloat("MovementValue", 0f);
+            }
+            if (Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
+            {
+                animator.SetFloat("MovementValue", 0.5f);
+                StartCoroutine(setEnergy());
+            }
+
+        }
+        if(PlayerEnergy>=1)
+        {
+            movementSpeed = 3f;
+        }
+
         if (OnSurface)
         {
 
@@ -146,13 +185,41 @@ public class PlayerScript : MonoBehaviour
     void Surface()
     {
         OnSurface = Physics.CheckSphere(surfacecheck.position, surfaceDistance, surfaceMask);
-        //if (OnSurface && velocity.y < 0)
-        //    velocity.y = -2f;
-        ////gravity
-        //velocity.y += gravity * Time.deltaTime;
-        //cC.Move(velocity * Time.deltaTime);
     }
+    public void PlayerHitDamage(float giveDamage)
+    {
+        presentHealth-= giveDamage;
+        StartCoroutine(showDamage());
+        healthBar.SetHealth(presentHealth);
+        if(presentHealth <= 0)
+        {
+            PlayerDie();
+        }
 
+    }
+    void PlayerDie()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Object.Destroy(gameObject,1f);
+    }
+    public void PlayerEnergyDecrease(float EnergyDecrease)
+    {
+        presentEnergy-= EnergyDecrease;
+        energyBar.SetEnergy(presentEnergy);
+    }
+    IEnumerator setEnergy()
+    {
+        
+        yield return new WaitForSeconds(5f);
+        energyBar.GiveFullEnergy(presentEnergy);
+        presentEnergy = 100f;
+    }
+    IEnumerator showDamage()
+    {
+        damageIndicator.SetActive(true);
+        yield return new WaitForSeconds(.2f);
+        damageIndicator.SetActive(false);
+    }
 }
 
 //player movement extra

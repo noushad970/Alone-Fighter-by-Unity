@@ -154,7 +154,7 @@ public class KnightAI : MonoBehaviour
            PlayerScript playerScript=player.GetComponent<PlayerScript>();
             if(playerScript != null)
             {
-                Debug.Log("Hitting Player");
+                playerScript.PlayerHitDamage(giveDamage);
             }
 
         }

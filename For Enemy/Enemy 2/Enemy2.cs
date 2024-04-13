@@ -30,6 +30,7 @@ public class Enemy2 : MonoBehaviour
     bool previouslyAttack;
     public float timebtwAttack;
     public Animator anim;
+    int x = 0;
 
     private void Start()
     {
@@ -68,6 +69,7 @@ public class Enemy2 : MonoBehaviour
         if (!previouslyAttack)
         {
             singleMeleeVal = Random.Range(1, 2);
+            x = 0;
         }
         if (singleMeleeVal == 1)
         {
@@ -108,8 +110,7 @@ public class Enemy2 : MonoBehaviour
     {
         anim.SetBool("IsDead", true);
         this.enabled = false;
-        GetComponent<CapsuleCollider
-            >().enabled = false;
+        GetComponent<CapsuleCollider>().enabled = false;
     }
     void AttackPlayer()
     {
@@ -117,9 +118,10 @@ public class Enemy2 : MonoBehaviour
         foreach (Collider player in hitPlayer)
         {
             PlayerScript playerScript = player.GetComponent<PlayerScript>();
-            if (playerScript != null)
+            if (playerScript != null && x==0)
             {
-                Debug.Log("Hitting Player");
+                playerScript.PlayerHitDamage(giveDamage);
+                x = 1 ;
             }
 
         }
