@@ -8,6 +8,7 @@ public class FistFight : MonoBehaviour
     public float timer = 0f;
     public int fistfightVal;
     public Animator anim;
+    public Inventory inventory;
     [Header("Give Damage to Enemy")]
     public Transform attackArea;
     public float giveDamage = 20f;
@@ -38,10 +39,13 @@ public class FistFight : MonoBehaviour
                 FistFightMode();
                 timer = 0f;
             }
-            if (timer >= 7f)
+            if (timer >= 5f)
             {
                 player.movementSpeed = 3f;
                 anim.SetBool("FistFightActive", false);
+            inventory.fistFightMode = false;
+            timer = 0f;
+            this.gameObject.GetComponent<FistFight>().enabled = false;  
             }
 
             timerCoolDown-=Time.deltaTime;

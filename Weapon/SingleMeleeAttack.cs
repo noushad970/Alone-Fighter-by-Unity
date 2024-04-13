@@ -22,20 +22,8 @@ public class SingleMeleeAttack : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        if (Input.GetMouseButton(0))
-        {
-            anim.SetBool("SingleHandMeleeActive", true);
-           
-        }
-        SingleHandMeleeAttackMode();
-
-
-
-
-
-
-
+    {  
+      SingleHandMeleeAttackMode();
     }
     void Attack()
     {
