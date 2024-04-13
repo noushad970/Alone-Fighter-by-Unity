@@ -15,7 +15,6 @@ public class RifleControl : MonoBehaviour
     public int mag;
     public float reloadingTime;
     public bool setReloading;
-    bool waitOneSec=false;
     bool isMoving=false;
     public PlayerScript playerScript;
     public GameObject crossHair;
@@ -80,15 +79,12 @@ public class RifleControl : MonoBehaviour
             if(knightAI != null )
             {
                 knightAI.takeDamage(giveDamage);
+                
             }
+            Debug.Log("Hit Info: " + hitInfo.transform.name);
         }
     }
-    IEnumerator waitSec()
-    {
-        waitOneSec=true;
-        yield return new WaitForSeconds(1f);
-        waitOneSec = false;
-    }
+   
     IEnumerator Reload()
     {
         setReloading=true;

@@ -2,20 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KnightAI : MonoBehaviour
+public class Enemy2 : MonoBehaviour
 {
     [Header("Character Info")]
-    public float AIMovingSpeed;
     public float AITurningSpeed = 300f;
     public float AIStopSpeed = 1f;
     public float RunningSpeed;
     public float currentMovingSpeed;
     public float MaxHealth = 120f;
     public float currentHealth;
-
-    [Header("Destination Var")]
-    public Vector3 AIDestination;
-    public bool AIDestinationReached;
 
     [Header("Knight AI")]
     public GameObject playerBody;
@@ -37,7 +32,7 @@ public class KnightAI : MonoBehaviour
 
     private void Start()
     {
-        currentMovingSpeed = AIMovingSpeed;
+       
         currentHealth = MaxHealth;
         playerBody = GameObject.Find("Player");
     }
@@ -47,8 +42,8 @@ public class KnightAI : MonoBehaviour
         playerInAttackRadius = Physics.CheckSphere(transform.position, attackRadius, playerLayer);
         if (!playerInvisionRadius && !playerInAttackRadius)
         {
-            anim.SetBool("Idle", false);
-            walk();
+           
+            Idle();
         }
         if (playerInvisionRadius && !playerInAttackRadius)
         {
@@ -58,38 +53,14 @@ public class KnightAI : MonoBehaviour
         if (playerInAttackRadius && playerInvisionRadius)
         {
             anim.SetBool("Idle", true);
+            anim.SetBool("Run", false);
             SingleMeleeModes();
-            
+
         }
     }
-    public void walk()
+    public void Idle()
     {
-        currentMovingSpeed = AIMovingSpeed;
-        if (transform.position != AIDestination)
-        {
-            Vector3 AIDestinationDirection = AIDestination - transform.position;
-            AIDestinationDirection.y = 0;
-            float AIDestinationDistance = AIDestinationDirection.magnitude;
-            if (AIDestinationDistance >= AIStopSpeed)
-            {
-                //turning
-                AIDestinationReached = false;
-                Quaternion targetRotation = Quaternion.LookRotation(AIDestinationDirection);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, AITurningSpeed * Time.deltaTime);
-                anim.SetBool("Walk", true);
-                anim.SetBool("Run", false);
-                anim.SetBool("Attack", false);
-
-                //moving AI
-                transform.Translate(Vector3.forward * currentMovingSpeed * Time.deltaTime);
-            }
-            else
-            {
-                AIDestinationReached = true;
-            }
-
-
-        }
+        anim.SetBool("Run", false);
     }
     void SingleMeleeModes()
     {
@@ -99,25 +70,21 @@ public class KnightAI : MonoBehaviour
         }
         if (singleMeleeVal == 1)
         {
-            
+
             AttackPlayer();
             StartCoroutine(Attack1());
 
         }
         if (singleMeleeVal == 2)
         {
-           
+
             AttackPlayer();
             StartCoroutine(Attack2());
         }
-       
+
 
     }
-    public void LocateDestination(Vector3 destination)
-    {
-        this.AIDestination = destination;
-        AIDestinationReached = false;
-    }
+    
 
     public void takeDamage(float amount)
     {
@@ -130,9 +97,8 @@ public class KnightAI : MonoBehaviour
     }
     public void ChasePlayer()
     {
-        anim.SetBool("Walk", false);
-        anim.SetBool("Run", true);
-        anim.SetBool("Attack", false);
+       
+        anim.SetBool("Run", true); 
         currentMovingSpeed = RunningSpeed;
         transform.position += transform.forward * currentMovingSpeed * Time.deltaTime;
         transform.LookAt(playerBody.transform);
@@ -149,8 +115,8 @@ public class KnightAI : MonoBehaviour
         Collider[] hitPlayer = Physics.OverlapSphere(attackArea.position, attackingRadius, playerLayer);
         foreach (Collider player in hitPlayer)
         {
-           PlayerScript playerScript=player.GetComponent<PlayerScript>();
-            if(playerScript != null)
+            PlayerScript playerScript = player.GetComponent<PlayerScript>();
+            if (playerScript != null)
             {
                 Debug.Log("Hitting Player");
             }
@@ -167,21 +133,21 @@ public class KnightAI : MonoBehaviour
     IEnumerator Attack1()
     {
         anim.SetBool("Attack1", true);
-        AIMovingSpeed = 0f;
+      
         RunningSpeed = 0f;
         yield return new WaitForSeconds(.2f);
         anim.SetBool("Attack1", false);
-        AIMovingSpeed = 1f;
+       
         RunningSpeed = 2f;
     }
     IEnumerator Attack2()
     {
         anim.SetBool("Attack2", true);
-        AIMovingSpeed = 0f;
+       
         RunningSpeed = 0f;
         yield return new WaitForSeconds(.2f);
         anim.SetBool("Attack2", false);
-        AIMovingSpeed = 1f;
+      
         RunningSpeed = 2f;
     }
 
@@ -189,5 +155,4 @@ public class KnightAI : MonoBehaviour
     {
         previouslyAttack = false;
     }
-
 }
