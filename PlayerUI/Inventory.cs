@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//this script will attach with the player
+
 public class Inventory : MonoBehaviour
 {
     [Header("Weapon 1 Slot")]
@@ -64,12 +66,20 @@ public class Inventory : MonoBehaviour
             isWeapon3Active = true;
             isRifleActive();
         }
-        else if (Input.GetKeyDown("3") && isWeapon3Active)
+        else if (Input.GetKeyDown("3") && isWeapon3Active )
         {
             isWeapon3Active = false;
             isRifleActive();
         }
-        if(Input.GetKeyDown("4") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && GM.numberOfhealth>0)
+
+        if (isWeapon3Active && GM.numberOfGranade <= 0)
+        {
+            isWeapon3Active = false;
+            isRifleActive();
+        }
+
+
+        if (Input.GetKeyDown("4") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && GM.numberOfhealth>0)
         {
             StartCoroutine(IncreaseHealth());
         }
@@ -77,6 +87,7 @@ public class Inventory : MonoBehaviour
         {
             StartCoroutine(IncreaseEnergy());
         }
+        
     }
     void isRifleActive()
     {

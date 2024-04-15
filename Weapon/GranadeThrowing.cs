@@ -9,13 +9,20 @@ public class GranadeThrowing : MonoBehaviour
     public GameObject granadePrefab;
     public Animator anim;
     float timer = 3f;
+    public GameManager GM;
+    private void Start()
+    {
+        //GM=GM.GetComponent<GameManager>();
+    }
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) && timer == 3f)
+        if (Input.GetMouseButtonDown(1) && timer == 3f && GM.numberOfGranade>0)
         {
             StartCoroutine(GranadeAnim());
+            GM.numberOfGranade -= 1;
             StartCoroutine(timers());
+
         }
     }
     void throwGranade()

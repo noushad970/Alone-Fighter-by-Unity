@@ -52,6 +52,7 @@ public class PickUpItem : MonoBehaviour
                 {
                     Debug.Log(itemTag + " is picked up");
                     inventory.isWeapon3Picked = true;
+                    manager.numberOfGranade += 5;
                 }
                 itemToPick.SetActive(false);
             }

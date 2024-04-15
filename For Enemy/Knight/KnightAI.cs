@@ -26,6 +26,7 @@ public class KnightAI : MonoBehaviour
     public bool playerInvisionRadius;
     public float attackRadius;
     public bool playerInAttackRadius;
+    bool hasAttack=false;
 
 
     [Header("Knight Attack Var")]
@@ -103,13 +104,15 @@ public class KnightAI : MonoBehaviour
         {
             
             AttackPlayer();
+           
             StartCoroutine(Attack1());
 
         }
-        if (singleMeleeVal == 2)
+        if (singleMeleeVal == 2 )
         {
            
             AttackPlayer();
+            
             StartCoroutine(Attack2());
         }
        
@@ -146,15 +149,17 @@ public class KnightAI : MonoBehaviour
         GetComponent<CapsuleCollider
             >().enabled = false;
     }
+  
     void AttackPlayer()
     {
         Collider[] hitPlayer = Physics.OverlapSphere(attackArea.position, attackingRadius, playerLayer);
         foreach (Collider player in hitPlayer)
         {
            PlayerScript playerScript=player.GetComponent<PlayerScript>();
-            if(playerScript != null)
+            if(playerScript != null && !previouslyAttack)
             {
                 playerScript.PlayerHitDamage(giveDamage);
+            
             }
 
         }
@@ -175,6 +180,7 @@ public class KnightAI : MonoBehaviour
         anim.SetBool("Attack1", false);
         AIMovingSpeed = 1f;
         RunningSpeed = 2f;
+       
     }
     IEnumerator Attack2()
     {
@@ -185,6 +191,7 @@ public class KnightAI : MonoBehaviour
         anim.SetBool("Attack2", false);
         AIMovingSpeed = 1f;
         RunningSpeed = 2f;
+       
     }
 
     private void ActiveAttack()
