@@ -21,6 +21,7 @@ public class FistFight : MonoBehaviour
     [SerializeField] Transform RightLegKick;
     public PlayerScript player;
     [SerializeField] float timerCoolDown = 1f;
+    public AudioSetup audioSetup;
 
 
 
@@ -55,16 +56,18 @@ public class FistFight : MonoBehaviour
 
 
     }
+    bool touchBody=false;
     void Attack()
     {
         Collider[] hitKnight=Physics.OverlapSphere(attackArea.position, attackRadius,knightLayer);
         foreach(Collider knight in hitKnight)
         {  
             KnightAI knightAI = knight.GetComponent<KnightAI>();
-            
-            if(knightAI != null)
+
+            if (knightAI != null)
             {
                 knightAI.takeDamage(giveDamage);
+                touchBody = true;
             }
 
         }
@@ -75,6 +78,7 @@ public class FistFight : MonoBehaviour
             if (knightAI2 != null)
             {
                 knightAI2.takeDamage(giveDamage);
+                touchBody = true;
             }
 
         }
@@ -88,40 +92,62 @@ public class FistFight : MonoBehaviour
     
     void FistFightMode()
     {
-        if(Input.GetMouseButtonDown(0) && timerCoolDown<=0)
+        if(Input.GetMouseButtonDown(0) && timerCoolDown<=0 && !Inventory.weaponIn1Hand && !Inventory.weaponIn2Hand && !Inventory.weaponIn3Hand)
         {
-            fistfightVal = Random.Range(1, 5);
+            fistfightVal = Random.Range(1, 4);
             if (fistfightVal == 1)
             {
                 attackArea = RightHandPunch;
                 attackRadius = 1.5f;
+                if (touchBody)
+                {
+                    audioSetup.playFistPunch1Sound();
+                    touchBody = false;
+                }
+                else if(!touchBody)
+                    audioSetup.playfistAttackEmptySound();
                 Attack();
                 StartCoroutine(singleFist());
 
             }
-            if (fistfightVal == 2)
-            {
-                attackArea = RightHandPunch;
-                attackRadius = 1.5f;
-                Attack();
-                StartCoroutine(DoubleFist());
-            }
+           
             if (fistfightVal == 3)
             {
+                if (touchBody)
+                {
+                    audioSetup.playFistPunch1Sound();
+                    touchBody = false;
+                }
+                else
+                    audioSetup.playfistAttackEmptySound();
                 attackArea = RightLegKick;
                 attackRadius = 1.5f;
                 Attack();
                 StartCoroutine(SingleKick());
             }
-            if (fistfightVal == 4)
+            if (fistfightVal == 2)
             {
+                if (touchBody)
+                {
+                    audioSetup.playFistPunch2Sound();
+                    touchBody = false;
+                }
+                else
+                    audioSetup.playfistAttackEmptySound();
                 attackArea = RightLegKick;
                 attackRadius = 1.5f;
                 Attack();
                 StartCoroutine(swingKick());
             }
-            if (fistfightVal == 5)
+            if (fistfightVal == 4)
             {
+                if (touchBody)
+                {
+                    audioSetup.playFistPunch1Sound();
+                    touchBody = false;
+                }
+                else
+                    audioSetup.playfistAttackEmptySound();
                 attackArea = RightHandPunch;
                 attackRadius = 1.5f;
                 Attack();
@@ -144,19 +170,7 @@ public class FistFight : MonoBehaviour
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
-    IEnumerator DoubleFist()
-    {
-        // isFistAnimated = true;
-        player.movementSpeed = 0f;
-        anim.SetFloat("MovementValue", 0f);
-        anim.SetBool("DoubleFist", true);
-        yield return new WaitForSeconds(1.12f);
-        timerCoolDown = 1f;
-        anim.SetBool("DoubleFist", false);
-        player.movementSpeed = player.slowRunSpeed;
-        anim.SetFloat("MovementValue", 0f);
-        // isFistAnimated = false;
-    }
+    
     IEnumerator SingleKick()
     {
         //isFistAnimated = true;

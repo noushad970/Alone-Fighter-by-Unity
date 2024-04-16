@@ -17,7 +17,8 @@ public class SingleMeleeAttack : MonoBehaviour
 
     
     public PlayerScript player;
-
+    public AudioSetup audioSetup;
+    public AudioSetup audioSetup2;
 
 
     // Update is called once per frame
@@ -33,7 +34,14 @@ public class SingleMeleeAttack : MonoBehaviour
             KnightAI knightAI = knight.GetComponent<KnightAI>();
             if (knightAI != null)
             {
+
+                audioSetup2.playSwordAttack1Sound();
                 knightAI.takeDamage(giveDamage);
+                
+            }
+            if (knightAI == null)
+            {
+                audioSetup2.playSwordSliceEmptySound();
             }
 
         }
@@ -43,7 +51,13 @@ public class SingleMeleeAttack : MonoBehaviour
 
             if (knightAI2 != null)
             {
+                audioSetup2.playSwordAttack2Sound();
                 knightAI2.takeDamage(giveDamage);
+                
+            }
+            if(knightAI2==null)
+            {
+                audioSetup2.playSwordSliceEmptySound();
             }
 
         }
@@ -55,7 +69,7 @@ public class SingleMeleeAttack : MonoBehaviour
     }
     void SingleHandMeleeAttackMode()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && Inventory.weaponIn1Hand)
         {
             SingleMeleeVal = Random.Range(1, 4);
 
@@ -94,7 +108,7 @@ public class SingleMeleeAttack : MonoBehaviour
         anim.SetBool("SingleMeleeAttack1", true);
         yield return new WaitForSeconds(1f);
         anim.SetBool("SingleMeleeAttack1", false);
-        player.movementSpeed = player.slowRunSpeed;
+        player.movementSpeed = 1f;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
@@ -106,7 +120,7 @@ public class SingleMeleeAttack : MonoBehaviour
         anim.SetBool("SingleMeleeAttack2", true);
         yield return new WaitForSeconds(2f);
         anim.SetBool("SingleMeleeAttack2", false);
-        player.movementSpeed = player.slowRunSpeed;
+        player.movementSpeed = 1f;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
@@ -118,7 +132,7 @@ public class SingleMeleeAttack : MonoBehaviour
         anim.SetBool("SingleMeleeAttack3", true);
         yield return new WaitForSeconds(1.1f);
         anim.SetBool("SingleMeleeAttack3", false);
-        player.movementSpeed = player.slowRunSpeed;
+        player.movementSpeed = 1f;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
@@ -130,7 +144,7 @@ public class SingleMeleeAttack : MonoBehaviour
         anim.SetBool("SingleMeleeAttack4", true);
         yield return new WaitForSeconds(3.05f);
         anim.SetBool("SingleMeleeAttack4", false);
-        player.movementSpeed = player.slowRunSpeed;
+        player.movementSpeed = 1f;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }

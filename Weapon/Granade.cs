@@ -12,9 +12,10 @@ public class Granade : MonoBehaviour
     public float radius = 10f;
     void Start()
     {
+       
         counDown = granadeTimer;
     }
-
+   
     // Update is called once per frame
     void Update()
     {

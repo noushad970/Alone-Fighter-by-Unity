@@ -30,6 +30,7 @@ public class Enemy2 : MonoBehaviour
     bool previouslyAttack;
     public float timebtwAttack;
     public Animator anim;
+    public AudioSetup audioSetup;
   
 
     private void Start()
@@ -92,11 +93,13 @@ public class Enemy2 : MonoBehaviour
 
     public void takeDamage(float amount)
     {
+
         currentHealth -= amount;
         if (currentHealth <= 0)
         {
             Die();
         }
+        audioSetup.playHumanHurt1Sound();
         StartCoroutine(wait1Sec());
         
     }
@@ -115,6 +118,7 @@ public class Enemy2 : MonoBehaviour
     }
     void Die()
     {
+        audioSetup.playHumanDeadSound();
         anim.SetBool("IsDead", true);
         this.enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;

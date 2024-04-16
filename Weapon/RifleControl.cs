@@ -18,6 +18,7 @@ public class RifleControl : MonoBehaviour
     bool isMoving=false;
     public PlayerScript playerScript;
     public GameObject crossHair;
+    public AudioSetup audioSetup;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class RifleControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        isReloading = setReloading;
         if(animator.GetFloat("MovementValue")>0.0001f)
             isMoving = true;
         else if(animator.GetFloat("MovementValue")<0.0999999f)
@@ -37,11 +39,13 @@ public class RifleControl : MonoBehaviour
         if(presentAmmo<=0 && mag>0 )
         {
             StartCoroutine(Reload());
+            return;
         }
-        if(Input.GetMouseButtonDown(0) && mag>0 && !isMoving)
+        if(Input.GetMouseButtonDown(0) && mag>0 && !isMoving && Inventory.weaponIn2Hand)
         {
             animator.SetBool("RifleActive", true);
             animator.SetBool("RifleShoot", true);
+            audioSetup.playGunSound();  
             shoot();
         }
         else if (!Input.GetMouseButtonDown(0))
@@ -84,18 +88,18 @@ public class RifleControl : MonoBehaviour
             Debug.Log("Hit Info: " + hitInfo.transform.name);
         }
     }
-   
+    public static bool isReloading;
     IEnumerator Reload()
     {
         setReloading=true;
         animator.SetFloat("MovementValue", 0f);
-        playerScript.movementSpeed = 0f;
+        audioSetup.playReloadSound();
         animator.SetBool("Reloading", true);
         yield return new WaitForSeconds(reloadingTime);
         animator.SetBool("Reloading", false);
         presentAmmo = maximumAmmunition;
         setReloading = false;
-        animator.SetFloat("MovementValue", 0f);
+        animator.SetFloat("MovementValue", 1f);
         playerScript.movementSpeed = playerScript.slowRunSpeed;
     }
 }

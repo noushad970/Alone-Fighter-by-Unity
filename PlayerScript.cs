@@ -21,22 +21,23 @@ public class PlayerScript : MonoBehaviour
     public GameObject damageIndicator;
     
     [Header("PlayerMovement")]
-    [HideInInspector]
+    
     public float movementSpeed;
     public MainCameraController MCC;
     public float rotSpeed = 600f;
     Quaternion requiredRotation;
     public EnvironmentChecker environmentChecker;
-    [HideInInspector]
-    public float walkSpeed = 1f;
-    [HideInInspector]
+    
+    public float walkSpeed = 2f;
+    
     public float slowRunSpeed = 4.5f;
-    [HideInInspector]
-    public float fastRunSpeed = 5f;
+    
+    public float fastRunSpeed = 5.5f;
 
 
     [Header("Player Animator")]
     public Animator animator;
+    public AudioSetup audioSetup;
 
     [Header("Gravity & Collision")]
     bool playerControl = true;
@@ -76,23 +77,57 @@ public class PlayerScript : MonoBehaviour
         }
         if(presentEnergy<=0)
         {
-            movementSpeed = walkSpeed;
-            if(!Input.GetButton("Horizontal") || !Input.GetButton("Vertical"))
+
+            movementSpeed = 2f;
+            if (!Input.GetButton("Horizontal") || !Input.GetButton("Vertical"))
             {
                 animator.SetFloat("MovementValue", 0f);
             }
             if (Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
             {
+                
                 animator.SetFloat("MovementValue", 0.5f);
                 StartCoroutine(setEnergy());
             }
 
         }
-        if(PlayerEnergy>=1)
+        
+        if(Inventory.weaponIn1Hand || Inventory.weaponIn2Hand && !RifleControl.isReloading)
         {
-            movementSpeed = slowRunSpeed;
-        }
+            if (PlayerEnergy >= 1)
+            {
 
+                movementSpeed = 2.3f;
+            }
+            if (presentEnergy <= 0)
+            {
+                movementSpeed = 1.5f;
+            }
+            if (PlayerEnergy >= 1 && Input.GetKey(KeyCode.RightShift) && movementSpeed>0)
+            {
+                movementSpeed = 3.4f;
+                animator.SetFloat("MovementValue", 1.5f);
+            }
+        }
+        else if(!RifleControl.isReloading)
+        {
+            if (PlayerEnergy >= 1)
+            {
+
+                movementSpeed = slowRunSpeed;
+            }
+            if (presentEnergy <= 0)
+            {
+                movementSpeed = walkSpeed;
+            }
+            if (PlayerEnergy >= 1 && Input.GetKey(KeyCode.RightShift) && movementSpeed>0)
+            {
+                movementSpeed = fastRunSpeed;
+                animator.SetFloat("MovementValue", 1.5f);
+            }
+        }
+        if (RifleControl.isReloading)
+            movementSpeed = 0f;
         if (OnSurface)
         {
 
@@ -162,6 +197,10 @@ public class PlayerScript : MonoBehaviour
         }
          moveDir= RequiredMoveDir;
          transform.rotation=Quaternion.RotateTowards(transform.rotation, requiredRotation, rotSpeed*Time.deltaTime);
+        if(movementAmount>0)
+            AudioSetup.isWalking = true;
+        else
+            AudioSetup.isWalking = false;
        
     }
     void playerLedgeMovement()

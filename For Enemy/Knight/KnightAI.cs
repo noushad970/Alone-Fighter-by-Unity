@@ -123,7 +123,7 @@ public class KnightAI : MonoBehaviour
         this.AIDestination = destination;
         AIDestinationReached = false;
     }
-
+    public AudioSetup audioSetup;
     public void takeDamage(float amount)
     {
         
@@ -132,6 +132,7 @@ public class KnightAI : MonoBehaviour
         {
             Die();
         }
+        audioSetup.playHumanHurt2Sound();
         StartCoroutine(wait1Sec());
        
     }
@@ -146,7 +147,9 @@ public class KnightAI : MonoBehaviour
     }
     void Die()
     {
+        
         anim.SetBool("IsDead", true);
+        audioSetup.playHumanDeadSound();
         this.enabled = false;
         GetComponent<CapsuleCollider
             >().enabled = false;

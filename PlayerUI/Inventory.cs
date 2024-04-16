@@ -31,9 +31,18 @@ public class Inventory : MonoBehaviour
     public PlayerScript playerScript;
     public Animator anim;
     public GameManager GM;
+    public AudioSetup audioSetup;
+
+    public static bool weaponIn1Hand;
+    public static bool weaponIn2Hand;
+    public static bool weaponIn3Hand;
+
 
     private void Update()
     {
+        weaponIn1Hand = isWeapon1Active;
+        weaponIn2Hand = isWeapon2Active;
+        weaponIn3Hand = isWeapon3Active;
         if(Input.GetMouseButtonDown(0) && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active)
         {
             fistFightMode = true;
@@ -42,6 +51,7 @@ public class Inventory : MonoBehaviour
         if(Input.GetKeyDown("1") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && isWeapon1Picked)
         {
             isWeapon1Active = true;
+            audioSetup.playDrawSwordSound();
             isRifleActive();
         }
         else if(Input.GetKeyDown("1") && isWeapon1Active)

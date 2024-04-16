@@ -10,7 +10,9 @@ public class GranadeThrowing : MonoBehaviour
     public Animator anim;
     float timer = 3f;
     public GameManager GM;
-   
+    public AudioSetup audioSetup;
+
+    
     // Update is called once per frame
     void Update()
     {
@@ -36,6 +38,7 @@ public class GranadeThrowing : MonoBehaviour
         throwGranade();
         yield return new WaitForSeconds(1f); 
         anim.SetBool("GranadeInAir", false);
+        
    
     }
 
@@ -44,6 +47,7 @@ public class GranadeThrowing : MonoBehaviour
         timer = 0f;
         yield return new WaitForSeconds(3f);
         timer = 3f;
+        audioSetup.playGranadeSound();
 
     }
 
