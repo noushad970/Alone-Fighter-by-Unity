@@ -177,7 +177,7 @@ public class Inventory : MonoBehaviour
         anim.SetBool("Drink", true);
         playerScript.movementSpeed = 0f;
         yield return new WaitForSeconds(2f);
-        playerScript.movementSpeed = 3f;
+        playerScript.movementSpeed = playerScript.slowRunSpeed;
         GM.numberOfhealth -= 1;
         anim.SetBool("Drink", false);
         playerScript.presentHealth = playerScript.PlayerHealth;
@@ -188,7 +188,7 @@ public class Inventory : MonoBehaviour
         anim.SetBool("Drink", true);
         playerScript.movementSpeed = 0f;
         yield return new WaitForSeconds(2f);
-        playerScript.movementSpeed = 3f;
+        playerScript.movementSpeed = playerScript.slowRunSpeed;
         anim.SetBool("Drink", false);
         playerScript.presentEnergy = 100f;
         GM.numberOfEnergy -= 1;

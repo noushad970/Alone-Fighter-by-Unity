@@ -37,6 +37,16 @@ public class SingleMeleeAttack : MonoBehaviour
             }
 
         }
+        foreach (Collider knight2 in hitKnight)
+        {
+            Enemy2 knightAI2 = knight2.GetComponent<Enemy2>();
+
+            if (knightAI2 != null)
+            {
+                knightAI2.takeDamage(giveDamage);
+            }
+
+        }
     }
     private void OnDrawGizmosSelected()
     {
@@ -48,30 +58,32 @@ public class SingleMeleeAttack : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             SingleMeleeVal = Random.Range(1, 4);
-        }
-        if (SingleMeleeVal == 1 && Input.GetMouseButtonDown(0))
-        {
-          
-            Attack();
-            StartCoroutine(MeleeAttack1());
 
+            if (SingleMeleeVal == 1 && Input.GetMouseButtonDown(0))
+            {
+
+                Attack();
+                StartCoroutine(MeleeAttack1());
+
+            }
+            if (SingleMeleeVal == 2 && Input.GetMouseButtonDown(0))
+            {
+
+                Attack();
+                StartCoroutine(MeleeAttack2());
+            }
+            if (SingleMeleeVal == 3 && Input.GetMouseButtonDown(0))
+            {
+                Attack();
+                StartCoroutine(MeleeAttack3());
+            }
+            if (SingleMeleeVal == 4 && Input.GetMouseButtonDown(0))
+            {
+                Attack();
+                StartCoroutine(MeleeAttack4());
+            }
         }
-        if (SingleMeleeVal == 2 && Input.GetMouseButtonDown(0))
-        {
-            
-            Attack();
-            StartCoroutine(MeleeAttack2());
-        }
-        if (SingleMeleeVal == 3 && Input.GetMouseButtonDown(0))
-        {
-            Attack();
-            StartCoroutine(MeleeAttack3());
-        }
-        if (SingleMeleeVal == 4 && Input.GetMouseButtonDown(0))
-        {
-            Attack();
-            StartCoroutine(MeleeAttack4());
-        }
+        
         
     }
     IEnumerator MeleeAttack1()
@@ -82,7 +94,7 @@ public class SingleMeleeAttack : MonoBehaviour
         anim.SetBool("SingleMeleeAttack1", true);
         yield return new WaitForSeconds(1f);
         anim.SetBool("SingleMeleeAttack1", false);
-        player.movementSpeed = 3f;
+        player.movementSpeed = player.slowRunSpeed;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
@@ -94,7 +106,7 @@ public class SingleMeleeAttack : MonoBehaviour
         anim.SetBool("SingleMeleeAttack2", true);
         yield return new WaitForSeconds(2f);
         anim.SetBool("SingleMeleeAttack2", false);
-        player.movementSpeed = 3f;
+        player.movementSpeed = player.slowRunSpeed;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
@@ -106,7 +118,7 @@ public class SingleMeleeAttack : MonoBehaviour
         anim.SetBool("SingleMeleeAttack3", true);
         yield return new WaitForSeconds(1.1f);
         anim.SetBool("SingleMeleeAttack3", false);
-        player.movementSpeed = 3f;
+        player.movementSpeed = player.slowRunSpeed;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
@@ -118,7 +130,7 @@ public class SingleMeleeAttack : MonoBehaviour
         anim.SetBool("SingleMeleeAttack4", true);
         yield return new WaitForSeconds(3.05f);
         anim.SetBool("SingleMeleeAttack4", false);
-        player.movementSpeed = 3f;
+        player.movementSpeed = player.slowRunSpeed;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }

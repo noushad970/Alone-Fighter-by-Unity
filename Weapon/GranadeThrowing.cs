@@ -10,10 +10,7 @@ public class GranadeThrowing : MonoBehaviour
     public Animator anim;
     float timer = 3f;
     public GameManager GM;
-    private void Start()
-    {
-        //GM=GM.GetComponent<GameManager>();
-    }
+   
     // Update is called once per frame
     void Update()
     {
@@ -41,11 +38,13 @@ public class GranadeThrowing : MonoBehaviour
         anim.SetBool("GranadeInAir", false);
    
     }
+
     IEnumerator timers()
     {
         timer = 0f;
         yield return new WaitForSeconds(3f);
         timer = 3f;
+
     }
 
 }

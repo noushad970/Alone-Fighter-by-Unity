@@ -21,11 +21,18 @@ public class PlayerScript : MonoBehaviour
     public GameObject damageIndicator;
     
     [Header("PlayerMovement")]
-    public float movementSpeed = 3f;
+    [HideInInspector]
+    public float movementSpeed;
     public MainCameraController MCC;
     public float rotSpeed = 600f;
     Quaternion requiredRotation;
     public EnvironmentChecker environmentChecker;
+    [HideInInspector]
+    public float walkSpeed = 1f;
+    [HideInInspector]
+    public float slowRunSpeed = 4.5f;
+    [HideInInspector]
+    public float fastRunSpeed = 5f;
 
 
     [Header("Player Animator")]
@@ -69,7 +76,7 @@ public class PlayerScript : MonoBehaviour
         }
         if(presentEnergy<=0)
         {
-            movementSpeed = 1.5f;
+            movementSpeed = walkSpeed;
             if(!Input.GetButton("Horizontal") || !Input.GetButton("Vertical"))
             {
                 animator.SetFloat("MovementValue", 0f);
@@ -83,7 +90,7 @@ public class PlayerScript : MonoBehaviour
         }
         if(PlayerEnergy>=1)
         {
-            movementSpeed = 3f;
+            movementSpeed = slowRunSpeed;
         }
 
         if (OnSurface)
@@ -132,22 +139,23 @@ public class PlayerScript : MonoBehaviour
        
             cC.Move(velocity * Time.deltaTime);
 
-        if (Input.GetKey(KeyCode.RightShift))
+        /* if (Input.GetKey(KeyCode.RightShift))
         {
-            movementSpeed = 5f;
+            movementSpeed = fastRunSpeed;
             animator.SetFloat("MovementValue", 1.5f, 0.2f, Time.deltaTime);
         }
         else
-            movementSpeed = 3f;
-        //fistfight speed
-        /*if (fistFight.isFistAnimated == true)
+            movementSpeed = slowRunSpeed;
+       if(OnSurface && Input.GetKeyDown(KeyCode.Space))
         {
-            movementSpeed = 0f;
+            animator.SetBool("IsJump", true);
         }
         else
-            movementSpeed = 3f;
+        {
+            animator.SetBool("IsJump", false);
+        }
         */
-       
+
         if (movementAmount > 0 && moveDir.magnitude>0.2f)
         {
             requiredRotation = Quaternion.LookRotation(moveDir);
@@ -216,6 +224,7 @@ public class PlayerScript : MonoBehaviour
     }
     IEnumerator showDamage()
     {
+        yield return new WaitForSeconds(.5f);
         damageIndicator.SetActive(true);
         yield return new WaitForSeconds(.2f);
         damageIndicator.SetActive(false);

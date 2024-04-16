@@ -96,6 +96,6 @@ public class RifleControl : MonoBehaviour
         presentAmmo = maximumAmmunition;
         setReloading = false;
         animator.SetFloat("MovementValue", 0f);
-        playerScript.movementSpeed = 5f;
+        playerScript.movementSpeed = playerScript.slowRunSpeed;
     }
 }

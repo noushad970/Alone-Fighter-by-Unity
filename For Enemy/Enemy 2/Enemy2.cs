@@ -30,7 +30,7 @@ public class Enemy2 : MonoBehaviour
     bool previouslyAttack;
     public float timebtwAttack;
     public Animator anim;
-    int x = 0;
+  
 
     private void Start()
     {
@@ -69,21 +69,22 @@ public class Enemy2 : MonoBehaviour
         if (!previouslyAttack)
         {
             singleMeleeVal = Random.Range(1, 2);
-            x = 0;
-        }
-        if (singleMeleeVal == 1)
-        {
 
-            AttackPlayer();
-            StartCoroutine(Attack1());
+            if (singleMeleeVal == 1)
+            {
 
-        }
-        if (singleMeleeVal == 2)
-        {
+                AttackPlayer();
+                StartCoroutine(Attack1());
 
-            AttackPlayer();
-            StartCoroutine(Attack2());
+            }
+            if (singleMeleeVal == 2)
+            {
+
+                AttackPlayer();
+                StartCoroutine(Attack2());
+            }
         }
+        
 
 
     }
@@ -91,12 +92,18 @@ public class Enemy2 : MonoBehaviour
 
     public void takeDamage(float amount)
     {
-        anim.SetTrigger("GetHit");
         currentHealth -= amount;
         if (currentHealth <= 0)
         {
             Die();
         }
+        StartCoroutine(wait1Sec());
+        
+    }
+    IEnumerator wait1Sec()
+    {
+        yield return new WaitForSeconds(0.5f);
+        anim.SetTrigger("GetHit");
     }
     public void ChasePlayer()
     {
@@ -118,10 +125,10 @@ public class Enemy2 : MonoBehaviour
         foreach (Collider player in hitPlayer)
         {
             PlayerScript playerScript = player.GetComponent<PlayerScript>();
-            if (playerScript != null && x==0)
+            if (playerScript != null)
             {
                 playerScript.PlayerHitDamage(giveDamage);
-                x = 1 ;
+               
             }
 
         }

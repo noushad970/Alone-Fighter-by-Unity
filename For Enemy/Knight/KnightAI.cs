@@ -26,8 +26,7 @@ public class KnightAI : MonoBehaviour
     public bool playerInvisionRadius;
     public float attackRadius;
     public bool playerInAttackRadius;
-    bool hasAttack=false;
-
+   
 
     [Header("Knight Attack Var")]
     public int singleMeleeVal;
@@ -81,7 +80,7 @@ public class KnightAI : MonoBehaviour
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, AITurningSpeed * Time.deltaTime);
                 anim.SetBool("Walk", true);
                 anim.SetBool("Run", false);
-                anim.SetBool("Attack", false);
+              //  anim.SetBool("Attack", false);
 
                 //moving AI
                 transform.Translate(Vector3.forward * currentMovingSpeed * Time.deltaTime);
@@ -99,22 +98,23 @@ public class KnightAI : MonoBehaviour
         if (!previouslyAttack)
         {
             singleMeleeVal = Random.Range(1, 2);
-        }
-        if (singleMeleeVal == 1)
-        {
-            
-            AttackPlayer();
-           
-            StartCoroutine(Attack1());
+            if (singleMeleeVal == 1)
+            {
 
+                AttackPlayer();
+
+                StartCoroutine(Attack1());
+
+            }
+            if (singleMeleeVal == 2)
+            {
+
+                AttackPlayer();
+
+                StartCoroutine(Attack2());
+            }
         }
-        if (singleMeleeVal == 2 )
-        {
-           
-            AttackPlayer();
-            
-            StartCoroutine(Attack2());
-        }
+        
        
 
     }
@@ -126,18 +126,20 @@ public class KnightAI : MonoBehaviour
 
     public void takeDamage(float amount)
     {
-        anim.SetTrigger("GetHit");
+        
         currentHealth -= amount;
         if (currentHealth <= 0)
         {
             Die();
         }
+        StartCoroutine(wait1Sec());
+       
     }
     public void ChasePlayer()
     {
         anim.SetBool("Walk", false);
         anim.SetBool("Run", true);
-        anim.SetBool("Attack", false);
+       // anim.SetBool("Attack", false);
         currentMovingSpeed = RunningSpeed;
         transform.position += transform.forward * currentMovingSpeed * Time.deltaTime;
         transform.LookAt(playerBody.transform);
@@ -156,7 +158,7 @@ public class KnightAI : MonoBehaviour
         foreach (Collider player in hitPlayer)
         {
            PlayerScript playerScript=player.GetComponent<PlayerScript>();
-            if(playerScript != null && !previouslyAttack)
+            if(playerScript != null )
             {
                 playerScript.PlayerHitDamage(giveDamage);
             
@@ -197,6 +199,11 @@ public class KnightAI : MonoBehaviour
     private void ActiveAttack()
     {
         previouslyAttack = false;
+    }
+    IEnumerator wait1Sec()
+    {
+        yield return new WaitForSeconds(0.5f);
+        anim.SetTrigger("GetHit");
     }
 
 }
