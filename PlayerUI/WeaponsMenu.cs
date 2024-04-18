@@ -15,17 +15,31 @@ public class WeaponsMenu : MonoBehaviour
     public GameObject weapon4StockUI;
     [Header("Potions")]
     public Inventory inventory;
+
+    [Header("Menus")]
+    public GameObject playerUI;
+    public GameObject miniMapUI;
+    public GameObject currentMenuUI;
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.O) && weaponsMenuActive==false)
         {
+            playerUI.SetActive(false);
+            miniMapUI.SetActive(false);
+            currentMenuUI.SetActive(false);
+
             weaponsMenuUI.SetActive(true);
             weaponsMenuActive = true;
             mainCamera.GetComponent<MainCameraController>().enabled = false;
             Time.timeScale = 0;
         }
+        
         else if(Input.GetKeyDown(KeyCode.O) && weaponsMenuActive == true)
         {
+            playerUI.SetActive(true);
+            miniMapUI.SetActive(true);
+            currentMenuUI.SetActive(true);
+
             weaponsMenuUI.SetActive(false);
             weaponsMenuActive = false;
             mainCamera.GetComponent<MainCameraController>().enabled = true;

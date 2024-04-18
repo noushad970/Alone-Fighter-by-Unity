@@ -19,7 +19,7 @@ public class SingleMeleeAttack : MonoBehaviour
     public PlayerScript player;
     public AudioSetup audioSetup;
     public AudioSetup audioSetup2;
-
+    float timerbtAttack = 1.5f;
 
     // Update is called once per frame
     void Update()
@@ -35,13 +35,8 @@ public class SingleMeleeAttack : MonoBehaviour
             if (knightAI != null)
             {
 
-                audioSetup2.playSwordAttack1Sound();
                 knightAI.takeDamage(giveDamage);
                 
-            }
-            if (knightAI == null)
-            {
-                audioSetup2.playSwordSliceEmptySound();
             }
 
         }
@@ -51,13 +46,8 @@ public class SingleMeleeAttack : MonoBehaviour
 
             if (knightAI2 != null)
             {
-                audioSetup2.playSwordAttack2Sound();
                 knightAI2.takeDamage(giveDamage);
                 
-            }
-            if(knightAI2==null)
-            {
-                audioSetup2.playSwordSliceEmptySound();
             }
 
         }
@@ -69,7 +59,7 @@ public class SingleMeleeAttack : MonoBehaviour
     }
     void SingleHandMeleeAttackMode()
     {
-        if (Input.GetMouseButtonDown(0) && Inventory.weaponIn1Hand)
+        if (Input.GetMouseButtonDown(0) && Inventory.weaponIn1Hand && timerbtAttack==1.5f)
         {
             SingleMeleeVal = Random.Range(1, 4);
 
@@ -96,55 +86,63 @@ public class SingleMeleeAttack : MonoBehaviour
                 Attack();
                 StartCoroutine(MeleeAttack4());
             }
+            StartCoroutine(timers());
         }
         
         
     }
+    IEnumerator timers()
+    {
+        timerbtAttack = 0f;
+        yield return new WaitForSeconds(1.5f);
+        timerbtAttack = 1.5f;
+    }
+    public static bool isAttackingWithSword=false;
     IEnumerator MeleeAttack1()
     {
-        player.movementSpeed = 0f;
+        isAttackingWithSword = true;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = true;
         anim.SetBool("SingleMeleeAttack1", true);
         yield return new WaitForSeconds(1f);
         anim.SetBool("SingleMeleeAttack1", false);
-        player.movementSpeed = 1f;
+        isAttackingWithSword = false;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
     IEnumerator MeleeAttack2()
     {
+        isAttackingWithSword = true;
         // isFistAnimated = true;
-        player.movementSpeed = 0f;
         anim.SetFloat("MovementValue", 0f);
         anim.SetBool("SingleMeleeAttack2", true);
         yield return new WaitForSeconds(2f);
         anim.SetBool("SingleMeleeAttack2", false);
-        player.movementSpeed = 1f;
+        isAttackingWithSword = false;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
     IEnumerator MeleeAttack3()
     {
+        isAttackingWithSword = true;
         //isFistAnimated = true;
-        player.movementSpeed = 0f;
         anim.SetFloat("MovementValue", 0f);
         anim.SetBool("SingleMeleeAttack3", true);
         yield return new WaitForSeconds(1.1f);
         anim.SetBool("SingleMeleeAttack3", false);
-        player.movementSpeed = 1f;
+        isAttackingWithSword = false;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }
     IEnumerator MeleeAttack4()
     {
+        isAttackingWithSword = true;
         // isFistAnimated = true;
-        player.movementSpeed = 0f;
         anim.SetFloat("MovementValue", 0f);
         anim.SetBool("SingleMeleeAttack4", true);
         yield return new WaitForSeconds(3.05f);
         anim.SetBool("SingleMeleeAttack4", false);
-        player.movementSpeed = 1f;
+        isAttackingWithSword = false;
         anim.SetFloat("MovementValue", 0f);
         // isFistAnimated = false;
     }

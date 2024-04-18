@@ -30,7 +30,6 @@ public class Enemy2 : MonoBehaviour
     bool previouslyAttack;
     public float timebtwAttack;
     public Animator anim;
-    public AudioSetup audioSetup;
   
 
     private void Start()
@@ -99,13 +98,12 @@ public class Enemy2 : MonoBehaviour
         {
             Die();
         }
-        audioSetup.playHumanHurt1Sound();
         StartCoroutine(wait1Sec());
         
     }
     IEnumerator wait1Sec()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         anim.SetTrigger("GetHit");
     }
     public void ChasePlayer()
@@ -118,7 +116,6 @@ public class Enemy2 : MonoBehaviour
     }
     void Die()
     {
-        audioSetup.playHumanDeadSound();
         anim.SetBool("IsDead", true);
         this.enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;

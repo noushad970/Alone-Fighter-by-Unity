@@ -14,6 +14,8 @@ public class FistFight : MonoBehaviour
     public float giveDamage = 20f;
     public float attackRadius;
     public LayerMask knightLayer;
+    float timeBTAttack = 2f;
+
 
     [SerializeField] Transform leftHandPunch;
     [SerializeField] Transform RightHandPunch;
@@ -90,9 +92,15 @@ public class FistFight : MonoBehaviour
         Gizmos.DrawWireSphere(attackArea.position, attackRadius);
     }
     
+    IEnumerator timebtAttack()
+    {
+        timeBTAttack = 0f;
+        yield return new WaitForSeconds(1.5f);
+        timeBTAttack = 2f;
+    }
     void FistFightMode()
     {
-        if(Input.GetMouseButtonDown(0) && timerCoolDown<=0 && !Inventory.weaponIn1Hand && !Inventory.weaponIn2Hand && !Inventory.weaponIn3Hand)
+        if(Input.GetMouseButtonDown(0) && timerCoolDown<=0 && !Inventory.weaponIn1Hand && !Inventory.weaponIn2Hand && !Inventory.weaponIn3Hand && timeBTAttack==2f)
         {
             fistfightVal = Random.Range(1, 4);
             if (fistfightVal == 1)
@@ -153,6 +161,7 @@ public class FistFight : MonoBehaviour
                 Attack();
                 StartCoroutine(punch2());
             }
+            StartCoroutine(timebtAttack());
         }
         
         

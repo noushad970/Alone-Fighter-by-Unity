@@ -205,7 +205,7 @@ public class KnightAI : MonoBehaviour
     }
     IEnumerator wait1Sec()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         anim.SetTrigger("GetHit");
     }
 

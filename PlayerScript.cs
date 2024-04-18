@@ -92,7 +92,7 @@ public class PlayerScript : MonoBehaviour
 
         }
         
-        if(Inventory.weaponIn1Hand || Inventory.weaponIn2Hand && !RifleControl.isReloading)
+        if((Inventory.weaponIn1Hand || Inventory.weaponIn2Hand) && !RifleControl.isReloading && !SingleMeleeAttack.isAttackingWithSword)
         {
             if (PlayerEnergy >= 1)
             {
@@ -109,7 +109,7 @@ public class PlayerScript : MonoBehaviour
                 animator.SetFloat("MovementValue", 1.5f);
             }
         }
-        else if(!RifleControl.isReloading)
+        else if(!RifleControl.isReloading && !SingleMeleeAttack.isAttackingWithSword)
         {
             if (PlayerEnergy >= 1)
             {
@@ -128,6 +128,10 @@ public class PlayerScript : MonoBehaviour
         }
         if (RifleControl.isReloading)
             movementSpeed = 0f;
+        if(SingleMeleeAttack.isAttackingWithSword)
+        {
+            movementSpeed = 0f;
+        }
         if (OnSurface)
         {
 

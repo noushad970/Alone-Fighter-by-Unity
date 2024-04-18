@@ -32,10 +32,16 @@ public class Inventory : MonoBehaviour
     public Animator anim;
     public GameManager GM;
     public AudioSetup audioSetup;
-
+    [Header("Weapon UI")]
     public static bool weaponIn1Hand;
     public static bool weaponIn2Hand;
     public static bool weaponIn3Hand;
+    [Header("Current Weapon UI")]
+    public GameObject fistInHand;
+    public GameObject pistolInHand;
+    public GameObject swordInHand;
+    public GameObject granadeInHand;
+    public WeaponsMenu WM;
 
 
     private void Update()
@@ -51,49 +57,79 @@ public class Inventory : MonoBehaviour
         if(Input.GetKeyDown("1") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && isWeapon1Picked)
         {
             isWeapon1Active = true;
+            swordInHand.SetActive(true);
+            pistolInHand.SetActive(false);
+            fistInHand.SetActive(false);
+            granadeInHand.SetActive(false );
             audioSetup.playDrawSwordSound();
             isRifleActive();
         }
         else if(Input.GetKeyDown("1") && isWeapon1Active)
         {
             isWeapon1Active=false;
+            swordInHand.SetActive(false);
+            pistolInHand.SetActive(false);
+            fistInHand.SetActive(true);
+            granadeInHand.SetActive(false);
             isRifleActive();
         }
 
         if (Input.GetKeyDown("2") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && isWeapon2Picked)
         {
             isWeapon2Active = true;
+            swordInHand.SetActive(false);
+            pistolInHand.SetActive(true);
+            fistInHand.SetActive(false);
+            granadeInHand.SetActive(false);
             isRifleActive();
         }
         else if (Input.GetKeyDown("2") && isWeapon2Active)
         {
             isWeapon2Active = false;
+
+            swordInHand.SetActive(false);
+            pistolInHand.SetActive(false);
+            fistInHand.SetActive(true);
+            granadeInHand.SetActive(false);
             isRifleActive();
         }
 
         if (Input.GetKeyDown("3") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && isWeapon3Picked)
         {
             isWeapon3Active = true;
+
+            swordInHand.SetActive(false);
+            pistolInHand.SetActive(false);
+            fistInHand.SetActive(false);
+            granadeInHand.SetActive(true);
             isRifleActive();
         }
         else if (Input.GetKeyDown("3") && isWeapon3Active )
         {
             isWeapon3Active = false;
+
+            swordInHand.SetActive(false);
+            pistolInHand.SetActive(false);
+            fistInHand.SetActive(true);
+            granadeInHand.SetActive(false);
             isRifleActive();
         }
 
         if (isWeapon3Active && GM.numberOfGranade <= 0)
         {
+
             isWeapon3Active = false;
+            granadeInHand.SetActive(false) ;
+            fistInHand.SetActive(true);
             isRifleActive();
         }
 
 
-        if (Input.GetKeyDown("4") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && GM.numberOfhealth>0)
+        if (Input.GetKeyDown("4") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && GM.numberOfhealth>0 && playerScript.presentHealth<100)
         {
             StartCoroutine(IncreaseHealth());
         }
-        if (Input.GetKeyDown("5") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && GM.numberOfEnergy > 0)
+        if (Input.GetKeyDown("5") && !isWeapon1Active && !isWeapon2Active && !isWeapon3Active && GM.numberOfEnergy > 0 && playerScript.presentEnergy<90)
         {
             StartCoroutine(IncreaseEnergy());
         }

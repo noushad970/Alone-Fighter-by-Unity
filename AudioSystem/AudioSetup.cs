@@ -23,6 +23,7 @@ public class AudioSetup : MonoBehaviour
     public AudioClip reloadPistol;
     public AudioSource audioSource;
     public AudioSource audioSource2;
+    public AudioClip shootAndRelaod;
 
     public AudioClip[] footstepSounds;
     public float walkingStepInterval = 0.8f;
@@ -60,7 +61,8 @@ public class AudioSetup : MonoBehaviour
     void Update()
     {
         // Check if the button is pressed
-        
+        if(RifleControl.isReloading)
+            playShootAndReloadSound();
 
         // Check if the sound has finished playing
         if (isPlaying && !audioSource.isPlaying)
@@ -72,7 +74,7 @@ public class AudioSetup : MonoBehaviour
             playGranadeSound();
         }
 
-        if (isWalking)
+        if (isWalking && !SingleMeleeAttack.isAttackingWithSword && !RifleControl.isReloading)
         {
             // Count time for footstep intervals
             timer += Time.deltaTime;
@@ -116,10 +118,10 @@ public class AudioSetup : MonoBehaviour
             isPlaying = true;
         }
     }
-    public void playReloadSound()
+   
+    public void playShootAndReloadSound()
     {
-        audioSource.clip = reloadPistol;
-        // Check if the sound is not already playing
+        audioSource.clip = shootAndRelaod;
         if (!isPlaying)
         {
             // Play the sound
@@ -130,7 +132,6 @@ public class AudioSetup : MonoBehaviour
     public void playGranadeSound()
     {
         audioSource.clip = GranadeExplode;
-        // Check if the sound is not already playing
         if (!isPlaying)
         {
             // Play the sound
