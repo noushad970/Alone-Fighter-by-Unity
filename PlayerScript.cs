@@ -1,10 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using static UnityEditor.Experimental.GraphView.GraphView;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 //this script will attach with player
@@ -89,6 +84,17 @@ public class PlayerScript : MonoBehaviour
                 animator.SetFloat("MovementValue", 0.5f);
                 StartCoroutine(setEnergy());
             }
+            /*
+            this code is for Android control
+            if (!SimpleInput.GetButton("Horizontal") || !SimpleInput.GetButton("Vertical"))
+            {
+            animator.SetFloat("MovementValue", 0f);
+            }
+            if (SimpleInput.GetButton("Horizontal") || SimpleInput.GetButton("Vertical"))
+            {
+            animator.SetFloat("MovementValue", 0.5f);
+            }
+            */
 
         }
         
