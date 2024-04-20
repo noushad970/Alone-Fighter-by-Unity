@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 //this following line is added for android control
-using UnityStandardAssets.CrossPlatformInput;
+//using UnityStandardAssets.CrossPlatformInput;
 //this script will attach with player
 public class GranadeThrowing : MonoBehaviour
 {

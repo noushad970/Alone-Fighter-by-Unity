@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//this script will added in minimap camera
 
 public class MiniMapScript : MonoBehaviour
 {
